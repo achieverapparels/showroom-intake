@@ -230,12 +230,15 @@
   }
 
   document.getElementById("feedback-btn").addEventListener("click", function () {
+    localStorage.setItem("scanMode", "feedback");
     window.location.href = buildFormUrl(ACTIVITY_CHOICES.feedback, styleId);
   });
   document.getElementById("checkin-btn").addEventListener("click", function () {
+    localStorage.setItem("scanMode", "checkinout");
     window.location.href = buildFormUrl(ACTIVITY_CHOICES.checkin, styleId);
   });
   document.getElementById("checkout-btn").addEventListener("click", function () {
+    localStorage.setItem("scanMode", "checkinout");
     window.location.href = buildFormUrl(ACTIVITY_CHOICES.checkout, styleId);
   });
 </script>
