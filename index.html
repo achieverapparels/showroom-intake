@@ -192,14 +192,10 @@
 
 <script>
   // ---- Configuration ----
-  var FORM_BASE_URL = "https://airtable.com/appCR0Vda4YMKS5X4/pagHWaQbG0l27Jcxv/form";
+  var FEEDBACK_FORM_URL = "https://airtable.com/appCR0Vda4YMKS5X4/pagEUurmA2y1fFINM/form";
+  var CHECKINOUT_FORM_URL = "https://airtable.com/appCR0Vda4YMKS5X4/paguceH2lspghGYbJ/form";
   var STYLE_ID_FIELD = "Style ID";
-  var ACTIVITY_FIELD = "Activity Type";
-  var ACTIVITY_CHOICES = {
-    feedback: "Log Buyer Showroom Feedback",
-    checkin: "Sample Check In",
-    checkout: "Sample Check Out"
-  };
+  var ACTION_FIELD = "Action";
   // ------------------------
 
   function getStyleId() {
@@ -207,13 +203,16 @@
     return params.get("styleID") || params.get("styleId") || params.get("StyleID") || "";
   }
 
-  function buildFormUrl(activityChoice, styleId) {
+  function buildFeedbackUrl(styleId) {
     var params = new URLSearchParams();
-    if (styleId) {
-      params.set("prefill_" + STYLE_ID_FIELD, styleId);
-    }
-    params.set("prefill_" + ACTIVITY_FIELD, activityChoice);
-    return FORM_BASE_URL + "?" + params.toString();
+    if (styleId) params.set("prefill_" + STYLE_ID_FIELD, styleId);
+    return FEEDBACK_FORM_URL + "?" + params.toString();
+  }
+  function buildCheckUrl(action, styleId) {
+    var params = new URLSearchParams();
+    if (styleId) params.set("prefill_" + STYLE_ID_FIELD, styleId);
+    params.set("prefill_" + ACTION_FIELD, action);
+    return CHECKINOUT_FORM_URL + "?" + params.toString();
   }
 
   var styleId = getStyleId();
@@ -229,15 +228,15 @@
 
   document.getElementById("feedback-btn").addEventListener("click", function () {
     localStorage.setItem("scanMode", "feedback");
-    window.location.href = buildFormUrl(ACTIVITY_CHOICES.feedback, styleId);
+    window.location.href = buildFeedbackUrl(styleId);
   });
   document.getElementById("checkin-btn").addEventListener("click", function () {
     localStorage.setItem("scanMode", "checkinout");
-    window.location.href = buildFormUrl(ACTIVITY_CHOICES.checkin, styleId);
+    window.location.href = buildCheckUrl("Checked In", styleId);
   });
   document.getElementById("checkout-btn").addEventListener("click", function () {
     localStorage.setItem("scanMode", "checkinout");
-    window.location.href = buildFormUrl(ACTIVITY_CHOICES.checkout, styleId);
+    window.location.href = buildCheckUrl("Checked Out", styleId);
   });
 </script>
 </body>
