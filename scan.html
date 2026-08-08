@@ -157,10 +157,8 @@
     var params = new URLSearchParams();
     if (styleId) {
       params.set("prefill_" + STYLE_ID_FIELD, styleId);
-      params.set("hide_" + STYLE_ID_FIELD, "true");
     }
     params.set("prefill_" + ACTIVITY_FIELD, FEEDBACK_CHOICE);
-    params.set("hide_" + ACTIVITY_FIELD, "true");
     return FORM_BASE_URL + "?" + params.toString();
   }
 
