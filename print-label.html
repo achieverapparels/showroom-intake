@@ -11,17 +11,21 @@
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0; width: 50mm; height: 50mm;
+    max-width: 50mm; max-height: 50mm;
+    overflow: hidden; /* hard safety net: never let content spill onto a 2nd label */
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-family: 'Manrope', Arial, sans-serif;
     background: #fff;
+    page-break-inside: avoid;
+    page-break-after: avoid;
   }
-  img { width: 28mm; height: 28mm; }
+  img { width: 24mm; height: 24mm; }
   p {
-    margin: 1mm 0 0;
-    font-size: 7pt;
+    margin: 0.8mm 0 0;
+    font-size: 6pt;
     font-weight: 700;
     text-align: center;
-    line-height: 1.25;
+    line-height: 1.15;
     color: #1A3049;
     white-space: pre-line;
   }
