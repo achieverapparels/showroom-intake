@@ -14,15 +14,21 @@
     max-width: 45mm; max-height: 45mm;
     overflow: hidden; /* hard safety net: never let content spill onto a 2nd label */
     display: flex; flex-direction: column; align-items: center; justify-content: center;
+    /* Your printer anchors the 45mm page flush to the top-left of the 50mm label,
+       leaving all of the 5mm slack at the bottom/right. This padding nudges the
+       centered content down and right so it lands closer to the middle of the
+       physical label. Adjust these two values if it's still off. */
+    padding: 4mm 0 0 4mm;
+    box-sizing: border-box;
     font-family: 'Manrope', Arial, sans-serif;
     background: #fff;
     page-break-inside: avoid;
     page-break-after: avoid;
   }
-  img { width: 30mm; height: 30mm; }
+  img { width: 26mm; height: 26mm; }
   p {
     margin: 0.8mm 0 0;
-    font-size: 7.5pt;
+    font-size: 7pt;
     font-weight: 700;
     text-align: center;
     line-height: 1.15;
