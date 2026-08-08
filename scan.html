@@ -133,10 +133,8 @@
 
 <script>
   // Keep in sync with index.html
-  var FORM_BASE_URL = "https://airtable.com/appCR0Vda4YMKS5X4/pagHWaQbG0l27Jcxv/form";
+  var FEEDBACK_FORM_URL = "https://airtable.com/appCR0Vda4YMKS5X4/pagEUurmA2y1fFINM/form";
   var STYLE_ID_FIELD = "Style ID";
-  var ACTIVITY_FIELD = "Activity Type";
-  var FEEDBACK_CHOICE = "Log Buyer Showroom Feedback";
   var SITE_BASE_URL = "https://achieverapparels.github.io/showroom-intake/";
 
   var statusEl = document.getElementById("status");
@@ -155,11 +153,8 @@
 
   function buildFeedbackUrl(styleId) {
     var params = new URLSearchParams();
-    if (styleId) {
-      params.set("prefill_" + STYLE_ID_FIELD, styleId);
-    }
-    params.set("prefill_" + ACTIVITY_FIELD, FEEDBACK_CHOICE);
-    return FORM_BASE_URL + "?" + params.toString();
+    if (styleId) params.set("prefill_" + STYLE_ID_FIELD, styleId);
+    return FEEDBACK_FORM_URL + "?" + params.toString();
   }
 
   function onScanSuccess(decodedText) {
