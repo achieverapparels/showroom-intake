@@ -152,6 +152,133 @@
     color: var(--grey-light);
     text-align: center;
   }
+  /* ---- staff gate ---- */
+  #gate {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 48, 73, 0.96);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 50;
+    overflow-y: auto;
+  }
+  #gate.open { display: flex; }
+  .gate-card {
+    width: 100%;
+    max-width: 380px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 26px 22px 22px;
+  }
+  .gate-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--grey-light);
+    margin-bottom: 6px;
+  }
+  .gate-card h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--navy);
+    margin: 0 0 20px;
+  }
+  .gate-card h2 em { font-style: italic; color: var(--terracotta); }
+  .gate-field { margin-bottom: 16px; }
+  .gate-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 7px;
+  }
+  .gate-field select,
+  .gate-field input,
+  .gate-field textarea {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: 'Manrope', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--navy);
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 14px;
+  }
+  .gate-field select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236F7378' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+    padding-right: 38px;
+  }
+  .gate-field textarea { min-height: 76px; resize: vertical; line-height: 1.45; }
+  .gate-field input[type="password"] { letter-spacing: 6px; text-align: center; }
+  .gate-field input[type="password"]::placeholder { letter-spacing: 2px; color: var(--grey-light); }
+  .gate-field select:focus,
+  .gate-field input:focus,
+  .gate-field textarea:focus { outline: none; border-color: var(--terracotta); }
+  .gate-note {
+    font-size: 12px;
+    color: var(--grey);
+    margin: -8px 0 16px;
+  }
+  .gate-msg {
+    display: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin: -6px 0 14px;
+  }
+  .gate-msg.show { display: block; }
+  .gate-msg.error { color: var(--terracotta); }
+  .gate-actions { display: flex; gap: 10px; margin-top: 4px; }
+  .gate-actions button {
+    flex: 1;
+    appearance: none;
+    border-radius: 9px;
+    padding: 15px 10px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #gate-cancel {
+    background: #ffffff;
+    color: var(--grey);
+    border: 1px solid var(--border);
+  }
+  #gate-go {
+    background: var(--terracotta);
+    color: #ffffff;
+    border: 1px solid var(--terracotta);
+  }
+  #gate-go:disabled { opacity: 0.45; cursor: default; }
+
+  /* ---- success ---- */
+  .gate-done { text-align: center; padding: 8px 0 4px; }
+  .gate-done .tick {
+    font-family: 'Fraunces', serif;
+    font-size: 40px;
+    color: var(--terracotta);
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .gate-done h2 { margin-bottom: 8px; }
+  .gate-done p {
+    font-size: 13.5px;
+    color: var(--grey);
+    margin: 0 0 22px;
+    line-height: 1.5;
+  }
 </style>
 </head>
 <body>
@@ -187,15 +314,61 @@
       <span class="arrow">→</span>
     </button>
   </div>
+    <div id="gate">
+    <div class="gate-card">
+
+      <div id="gate-form">
+        <div class="gate-eyebrow" id="gate-context">Sample Check Out</div>
+        <h2>Who is <em>doing this?</em></h2>
+
+        <div class="gate-field">
+          <label for="gate-staff">Merchant</label>
+          <select id="gate-staff">
+            <option value="">Select your name…</option>
+          </select>
+        </div>
+
+        <div class="gate-field">
+          <label for="gate-pin">6-digit PIN</label>
+          <input id="gate-pin" type="password" inputmode="numeric" pattern="[0-9]*"
+                 maxlength="6" placeholder="••••••" autocomplete="off">
+        </div>
+
+        <div class="gate-field" id="gate-notes-wrap">
+          <label for="gate-notes">Notes (optional)</label>
+          <textarea id="gate-notes"
+                    placeholder="Where is the sample going to / coming from?"></textarea>
+        </div>
+
+        <div class="gate-msg" id="gate-msg"></div>
+
+        <div class="gate-actions">
+          <button id="gate-cancel" type="button">Cancel</button>
+          <button id="gate-go" type="button" disabled>Continue</button>
+        </div>
+      </div>
+
+      <div id="gate-done" class="gate-done" style="display:none;">
+        <div class="tick">✓</div>
+        <h2 id="done-title">Checked out</h2>
+        <p id="done-detail"></p>
+        <div class="gate-actions">
+          <button id="gate-close" type="button">Done</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <div class="footer">Achiever Apparels staff only</div>
 
 <script>
   // ---- Configuration ----
-  var FEEDBACK_FORM_URL = "https://airtable.com/appCR0Vda4YMKS5X4/pagEUurmA2y1fFINM/form";
-  var CHECKINOUT_FORM_URL = "https://airtable.com/appCR0Vda4YMKS5X4/paguceH2lspghGYbJ/form";
-  var STYLE_ID_FIELD = "Style ID";
-  var ACTION_FIELD = "Action";
+  // The only thing this page knows. No PINs, no Airtable URLs, no tokens.
+  var WORKER_URL = "https://showroom-gate.punweet.workers.dev";
+
+  // Names only. The Worker holds the PINs and decides whether one matches.
+  var STAFF_NAMES = ["Manju", "Sejal", "Radhika", "Gopal", "Poonam", "Shanta"];
   // ------------------------
 
   function getStyleId() {
@@ -203,20 +376,8 @@
     return params.get("styleID") || params.get("styleId") || params.get("StyleID") || "";
   }
 
-  function buildFeedbackUrl(styleId) {
-    var params = new URLSearchParams();
-    if (styleId) params.set("prefill_" + STYLE_ID_FIELD, styleId);
-    return FEEDBACK_FORM_URL + "?" + params.toString();
-  }
-  function buildCheckUrl(action, styleId) {
-    var params = new URLSearchParams();
-    if (styleId) params.set("prefill_" + STYLE_ID_FIELD, styleId);
-    params.set("prefill_" + ACTION_FIELD, action);
-    return CHECKINOUT_FORM_URL + "?" + params.toString();
-  }
-
-  var styleId = getStyleId();
-  var styleCard = document.getElementById("style-card");
+  var styleId    = getStyleId();
+  var styleCard  = document.getElementById("style-card");
   var styleValue = document.getElementById("style-value");
 
   if (styleId) {
@@ -226,18 +387,140 @@
     styleValue.textContent = "Not detected — you can add it manually on the next screen";
   }
 
+  var gate       = document.getElementById("gate");
+  var gateForm   = document.getElementById("gate-form");
+  var gateDone   = document.getElementById("gate-done");
+  var ctx        = document.getElementById("gate-context");
+  var staffSel   = document.getElementById("gate-staff");
+  var pinInput   = document.getElementById("gate-pin");
+  var notesWrap  = document.getElementById("gate-notes-wrap");
+  var notesInput = document.getElementById("gate-notes");
+  var msg        = document.getElementById("gate-msg");
+  var goBtn      = document.getElementById("gate-go");
+  var cancelBtn  = document.getElementById("gate-cancel");
+  var closeBtn   = document.getElementById("gate-close");
+  var doneTitle  = document.getElementById("done-title");
+  var doneDetail = document.getElementById("done-detail");
+
+  STAFF_NAMES.forEach(function (name) {
+    var opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    staffSel.appendChild(opt);
+  });
+
+  var pending = null;
+
+  function showMsg(text, isError) {
+    msg.textContent = text;
+    msg.className = "gate-msg show" + (isError ? " error" : "");
+  }
+  function clearMsg() { msg.className = "gate-msg"; }
+
+  function openGate(config) {
+    pending = config;
+    ctx.textContent = config.label;
+    staffSel.value = "";
+    pinInput.value = "";
+    notesInput.value = "";
+    notesWrap.style.display = config.kind === "checkinout" ? "" : "none";
+    clearMsg();
+    goBtn.disabled = true;
+    goBtn.textContent = "Continue";
+    gateForm.style.display = "";
+    gateDone.style.display = "none";
+    gate.classList.add("open");
+    setTimeout(function () { staffSel.focus(); }, 60);
+  }
+
+  function closeGate() {
+    gate.classList.remove("open");
+    pending = null;
+  }
+
+  function refreshGo() {
+    goBtn.disabled = !(staffSel.value && pinInput.value.length === 6);
+    clearMsg();
+  }
+
+  staffSel.addEventListener("change", refreshGo);
+  pinInput.addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, "").slice(0, 6);
+    refreshGo();
+  });
+  pinInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !goBtn.disabled) goBtn.click();
+  });
+
+  cancelBtn.addEventListener("click", closeGate);
+  closeBtn.addEventListener("click", closeGate);
+  gate.addEventListener("click", function (e) { if (e.target === gate) closeGate(); });
+
+  goBtn.addEventListener("click", function () {
+    if (!pending) return;
+
+    goBtn.disabled = true;
+    goBtn.textContent = "Checking…";
+    clearMsg();
+
+    var route = pending.kind === "checkinout" ? "/checkinout" : "/feedback";
+    var payload = {
+      name: staffSel.value,
+      pin: pinInput.value,
+      styleId: styleId
+    };
+    if (pending.kind === "checkinout") {
+      payload.action = pending.action;
+      payload.notes = notesInput.value;
+    }
+
+    fetch(WORKER_URL + route, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        return res.json().then(function (data) {
+          return { status: res.status, data: data };
+        });
+      })
+      .then(function (result) {
+        if (!result.data || !result.data.ok) {
+          var text = (result.data && result.data.error) || "Something went wrong.";
+          showMsg(text, true);
+          pinInput.value = "";
+          goBtn.textContent = "Continue";
+          goBtn.disabled = true;
+          pinInput.focus();
+          return;
+        }
+
+        if (pending.kind === "feedback") {
+          window.location.href = result.data.url;
+          return;
+        }
+
+        doneTitle.textContent =
+          pending.action === "Checked In" ? "Checked in" : "Checked out";
+        doneDetail.textContent =
+          (styleId ? styleId + " · " : "") + "recorded by " + result.data.verifiedBy + ".";
+        gateForm.style.display = "none";
+        gateDone.style.display = "";
+      })
+      .catch(function () {
+        showMsg("Couldn't reach the server. Check the connection and try again.", true);
+        goBtn.textContent = "Continue";
+        goBtn.disabled = false;
+      });
+  });
+
   document.getElementById("feedback-btn").addEventListener("click", function () {
-    localStorage.setItem("scanMode", "feedback");
-    window.location.href = buildFeedbackUrl(styleId);
+    openGate({ kind: "feedback", label: "Log Buyer Feedback" });
   });
   document.getElementById("checkin-btn").addEventListener("click", function () {
-    localStorage.setItem("scanMode", "checkinout");
-    window.location.href = buildCheckUrl("Checked In", styleId);
+    openGate({ kind: "checkinout", action: "Checked In", label: "Sample Check In" });
   });
   document.getElementById("checkout-btn").addEventListener("click", function () {
-    localStorage.setItem("scanMode", "checkinout");
-    window.location.href = buildCheckUrl("Checked Out", styleId);
+    openGate({ kind: "checkinout", action: "Checked Out", label: "Sample Check Out" });
   });
 </script>
-</body>
-</html>
